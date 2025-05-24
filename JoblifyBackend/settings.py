@@ -34,7 +34,8 @@ DEBUG = env('DEBUG')
 GEMINI_API_KEY = env('GEMINI_API_KEY')
 
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
 
 
 # Application definition
@@ -162,6 +163,8 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'onatadetobi212@gmail.com'
 
+
+print("ALLOWED_HOSTS is:", ALLOWED_HOSTS)
 
 
 
