@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     #'corsheader',
     'userauth',
     'resumes',
+    'joblinks',
 ]
 
 MIDDLEWARE = [

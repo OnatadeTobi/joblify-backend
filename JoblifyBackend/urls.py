@@ -28,4 +28,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/', include('userauth.urls')),
     path('api/resumes/', include('resumes.urls')),
+    path('api/joblinks/', include('joblinks.urls')),
 ]
