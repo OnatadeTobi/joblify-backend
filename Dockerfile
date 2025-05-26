@@ -50,5 +50,11 @@ RUN python manage.py collectstatic --noinput
 # Expose port
 EXPOSE 8000
 
-# Run the application with Gunicorn
-CMD ["gunicorn", "JoblifyBackend.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Copy entrypoint script
+COPY entrypoint.sh .
+
+# Make it executable (optional if done already)
+RUN chmod +x entrypoint.sh
+
+# Run entrypoint script
+CMD ["./entrypoint.sh"]
