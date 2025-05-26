@@ -44,9 +44,6 @@ RUN playwright install --with-deps
 # Copy entire project
 COPY . .
 
-# Collect static files (even if not used yet)
-RUN python manage.py collectstatic --noinput
-
 # Expose port
 EXPOSE 8000
 

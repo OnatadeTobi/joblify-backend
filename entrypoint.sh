@@ -14,5 +14,9 @@ if not User.objects.filter(username=username).exists():
     User.objects.create_superuser(username=username, email=email, password=password)
 "
 
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
+
 echo "Starting server..."
 exec gunicorn JoblifyBackend.wsgi:application --bind 0.0.0.0:8000
