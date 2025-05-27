@@ -40,6 +40,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
          # OTP creation
         otp = generate_otp()
         EmailOTP.objects.create(user=user, otp=otp)
+        print(otp)
         send_otp_email(user, otp)
 
         return user

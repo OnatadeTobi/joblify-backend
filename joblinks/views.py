@@ -393,3 +393,54 @@ class FetchJobInfoView(APIView):
                 "details": str(e),
                 "raw": text_output,
             }
+
+
+
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework import status
+# from .serializers import JobLinkSerializer
+# from rest_framework.generics import ListAPIView
+# from .models import JobLink
+
+# class SaveJobLinkView(APIView):
+#     def post(self, request):
+#         serializer = JobLinkSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({"message": "Job saved successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+# class JobLinkListView(ListAPIView):
+#     queryset = JobLink.objects.order_by('-created_at')  # Most recent first
+#     serializer_class = JobLinkSerializer
+
+
+
+
+
+
+from rest_framework import generics, permissions
+from .models import JobLink
+from .serializers import JobLinkSerializer
+
+class JobLinkListCreateView(generics.ListCreateAPIView):
+    serializer_class = JobLinkSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Return only jobs created by logged-in user
+        return JobLink.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        # Automatically associate the job with the logged-in user
+        serializer.save(user=self.request.user)
+
+class JobLinkDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = JobLinkSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Only allow accessing jobs owned by logged-in user
+        return JobLink.objects.filter(user=self.request.user)
