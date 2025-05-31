@@ -346,12 +346,18 @@ class FetchJobInfoView(APIView):
         - Company Name
         - Job Description
         - Platform (e.g. LinkedIn, Indeed)
+        - Location (e.g. United states, remote)
+        - Job Type (e.g, Remote, On-site, Hybrid)
+        - Pay (range or single value, like “$60,000 - $80,000”, if amount not found, put Undisclosed)
 
         Format the result as JSON like:
         {{
             "title": "...",
             "company": "...",
-            "platform": "..."
+            "platform": "...",
+            "location": "...",
+            "job_type": "...",
+            "pay": "..."
         }}
 
         Text:
@@ -385,6 +391,9 @@ class FetchJobInfoView(APIView):
                 "title": parsed.get("title"),
                 "company": parsed.get("company"),
                 "platform": parsed.get("platform"),
+                "location": parsed.get("location"),
+                "job_type": parsed.get("job_type"),
+                "pay": parsed.get("pay")
             }
 
         except Exception as e:
