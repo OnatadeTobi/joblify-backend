@@ -12,4 +12,4 @@ class JobLink(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title} at {self.company} from {self.platform}"
+        return f"{self.title} at {self.company} from {self.platform}  FOR   {self.user.first_name}"

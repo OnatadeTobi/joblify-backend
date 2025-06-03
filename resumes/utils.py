@@ -1,3 +1,97 @@
+import io
+import re
+import json
+from pdfminer.high_level import extract_text
+import google.generativeai as genai
+from django.conf import settings
+
+genai.configure(api_key=settings.GEMINI_API_KEY)
+
+def extract_text_from_pdf(file):
+    file_stream = io.BytesIO(file.read())
+    text = extract_text(file_stream)
+    #print(text)
+    return text
+
+def analyze_resume_with_gemini(resume_text):
+    prompt = f"""
+You are a resume parser. From the resume text below, extract structured JSON in the following format:
+
+ALL descriptions must be written in **first person** (e.g., "I built...", "I developed...", "I collaborated...").
+{
+    {
+  "Name": "",
+  "Location": "",
+  "avatar": "",
+  "Position": "",
+  "ShortBio": "",
+  "Linkedin": "",
+  "Github": "",
+  "Whatsapp": "",
+  "Resume": "",
+  "Skills": ["","","..."],
+  "Experience": [
+    {
+      "Company": "",
+      "Position": "",
+      "Duration": "",
+      "Img": "",
+      "AboutCompany": "",
+      "Link": "",
+      "WhatIDid": ""
+    },
+
+  ],
+  "Education": {
+    "Degree": "",
+    "Institution": "",
+    "Duration": "",
+    "Img": ""
+  }
+}
+
+}
+
+Instructions:
+- incase there is no about company just come up with something brief
+- incase there is no position look through the skills and add the position that fits it
+- The short bio should be exactly what is on the resume, if there is no bio, create one based on the information you have about the person.
+- Do not limit the number of skills; extract all listed.
+- Respond with **only valid JSON**. Do not include explanations, titles, or anything outside the JSON..
+
+Resume Text:
+\"\"\"
+{resume_text}
+\"\"\"
+"""
+
+    model = genai.GenerativeModel("gemini-2.0-flash")
+    response = model.generate_content(prompt)
+    content = response.text.strip()
+
+    try:
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        if json_match:
+            return json.loads(json_match.group())
+        else:
+            return {"error": "JSON not found in Gemini response", "raw_response": content}
+    except Exception as e:
+        return {"error": str(e), "raw_response": content}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # import io
 # from pdfminer.high_level import extract_text
 # import google.generativeai as genai
@@ -192,82 +286,3 @@
 #         return {"error": str(e), "raw_response": content}
 
 
-import io
-import re
-import json
-from pdfminer.high_level import extract_text
-import google.generativeai as genai
-from django.conf import settings
-
-genai.configure(api_key=settings.GEMINI_API_KEY)
-
-def extract_text_from_pdf(file):
-    file_stream = io.BytesIO(file.read())
-    text = extract_text(file_stream)
-    #print(text)
-    return text
-
-def analyze_resume_with_gemini(resume_text):
-    prompt = f"""
-You are a resume parser. From the resume text below, extract structured JSON in the following format:
-
-ALL descriptions must be written in **first person** (e.g., "I built...", "I developed...", "I collaborated...").
-{
-    {
-  "Name": "",
-  "Location": "",
-  "avatar": "",
-  "Position": "",
-  "ShortBio": "",
-  "Linkedin": "",
-  "Github": "",
-  "Whatsapp": "",
-  "Resume": "",
-  "Skills": ["","","..."],
-  "Experience": [
-    {
-      "Company": "",
-      "Position": "",
-      "Duration": "",
-      "Img": "",
-      "AboutCompany": "",
-      "Link": "",
-      "WhatIDid": ""
-    },
-
-  ],
-  "Education": {
-    "Degree": "",
-    "Institution": "",
-    "Duration": "",
-    "Img": ""
-  }
-}
-
-}
-
-Instructions:
-- incase there is no about company just come up with something brief
-- incase there is no position look through the skills and add the position that fits it
-- The short bio should be exactly what is on the resume, if there is no bio, create one based on the information you have about the person.
-- Do not limit the number of skills; extract all listed.
-- Respond with **only valid JSON**. Do not include explanations, titles, or anything outside the JSON..
-
-Resume Text:
-\"\"\"
-{resume_text}
-\"\"\"
-"""
-
-    model = genai.GenerativeModel("gemini-2.0-flash")
-    response = model.generate_content(prompt)
-    content = response.text.strip()
-
-    try:
-        json_match = re.search(r'\{.*\}', content, re.DOTALL)
-        if json_match:
-            return json.loads(json_match.group())
-        else:
-            return {"error": "JSON not found in Gemini response", "raw_response": content}
-    except Exception as e:
-        return {"error": str(e), "raw_response": content}

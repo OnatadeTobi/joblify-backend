@@ -1,5 +1,3 @@
 from django.contrib import admin
-from .models import JobLink
 
 # Register your models here.
-admin.site.register(JobLink)

@@ -60,14 +60,6 @@ class LoginUserView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
-class TestAuthenticationView(GenericAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        data = {'message':'its works'}
-        return Response(data, status=status.HTTP_200_OK)
     
 
 class PasswordResetRequestView(GenericAPIView):
