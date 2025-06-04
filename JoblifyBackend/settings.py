@@ -15,15 +15,22 @@ from pathlib import Path
 from datetime import timedelta
 import dj_database_url
 
-env = environ.Env(
-    DEBUG=(bool, False)
-)
+# env = environ.Env(
+#     DEBUG=(bool, False),
+#     DATABASE_URL=(str, f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+# )
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(
+    DEBUG=(bool, False),
+    DATABASE_URL=(str, f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+)
+
 environ.Env.read_env(BASE_DIR / '.env')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -111,22 +118,34 @@ WSGI_APPLICATION = 'JoblifyBackend.wsgi.application'
 # }
 
 
-DATABASES = {}
+# DATABASES = {}
 
-if env('DATABASE_URL', default=None):
-    # Use the full DATABASE_URL from environment (Render)
-    DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
+# if env('DATABASE_URL', default=None):
+#     # Use the full DATABASE_URL from environment (Render)
+#     DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
     
-else:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
-    }
+# else:
+#     DATABASES['default'] = {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('DB_NAME'),
+#         'USER': env('DB_USER'),
+#         'PASSWORD': env('DB_PASSWORD'),
+#         'HOST': env('DB_HOST'),
+#         'PORT': env('DB_PORT'),
+#     }
 
+# DATABASE_URL = env('DATABASE_URL')  # the full Supabase URL
+
+# DATABASES = {
+#     'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600),
+# }
+
+# DATABASES config:
+# - Reads DATABASE_URL from .env file locally
+# - Reads DATABASE_URL from environment variables on live (e.g. Render)
+DATABASES = {
+    'default': env.db(),
+}
 
 AUTH_USER_MODEL = 'userauth.User'
 
