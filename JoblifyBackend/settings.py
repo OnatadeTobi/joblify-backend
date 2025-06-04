@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import environ
 from pathlib import Path
 from datetime import timedelta
+import dj_database_url
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -98,8 +99,26 @@ WSGI_APPLICATION = 'JoblifyBackend.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('DB_NAME'),
+#         'USER': env('DB_USER'),
+#         'PASSWORD': env('DB_PASSWORD'),
+#         'HOST': env('DB_HOST'),
+#         'PORT': env('DB_PORT'),
+#     }
+# }
+
+
+DATABASES = {}
+
+if env('DATABASE_URL', default=None):
+    # Use the full DATABASE_URL from environment (Render)
+    DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
+    
+else:
+    DATABASES['default'] = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': env('DB_NAME'),
         'USER': env('DB_USER'),
@@ -107,7 +126,6 @@ DATABASES = {
         'HOST': env('DB_HOST'),
         'PORT': env('DB_PORT'),
     }
-}
 
 
 AUTH_USER_MODEL = 'userauth.User'
