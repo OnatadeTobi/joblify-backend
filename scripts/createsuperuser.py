@@ -13,3 +13,5 @@ def run():
         print("Superuser created.")
     else:
         print("Superuser already exists.")
+
+run()
