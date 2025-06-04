@@ -11,7 +11,15 @@ def run():
     if not User.objects.filter(username=username).exists():
         User.objects.create_superuser(username=username, email=email, password=password)
         print("Superuser created.")
+        print("Env username:", os.environ.get("DJANGO_SUPERUSER_USERNAME"))
+        print("Env email:", os.environ.get("DJANGO_SUPERUSER_EMAIL"))
+        print("Env password:", os.environ.get("DJANGO_SUPERUSER_PASSWORD"))
+
     else:
         print("Superuser already exists.")
+        print("Env username:", os.environ.get("DJANGO_SUPERUSER_USERNAME"))
+        print("Env email:", os.environ.get("DJANGO_SUPERUSER_EMAIL"))
+        print("Env password:", os.environ.get("DJANGO_SUPERUSER_PASSWORD"))
+
 
 run()
