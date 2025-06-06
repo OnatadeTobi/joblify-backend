@@ -18,6 +18,13 @@ Including another URLconf
 from django.http import JsonResponse
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
+# Customize admin site
+admin.site.site_header = "Joblify Admin"  # Change the header
+admin.site.site_title = "Joblify Admin Portal"  # Change the title
+admin.site.index_title = "Welcome to Joblify Admin Portal"  # Change the index title
 
 def api_root(request):
     return JsonResponse({"message": "Joblify API is live."})
@@ -27,7 +34,7 @@ urlpatterns = [
     path('', api_root),
     path('admin/', admin.site.urls),
     path('api/auth/', include('userauth.urls')),
-    path('api/auth/', include('social_accounts.urls')),
+    path('api/jobs/', include('joblinks.urls')),
     path('api/resumes/', include('resumes.urls')),
-    path('api/joblinks/', include('joblinks.urls')),
-]
+    path('api/auth/', include('social_accounts.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
