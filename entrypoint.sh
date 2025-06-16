@@ -10,6 +10,11 @@ echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
 echo "Starting server..."
+PORT=${PORT:-8000}
+exec gunicorn JoblifyBackend.wsgi:application --bind 0.0.0.0:$PORT
+
+
+#works perfectly with render, just commented it out to test railway
 exec gunicorn JoblifyBackend.wsgi:application --bind 0.0.0.0:8000
 
 
