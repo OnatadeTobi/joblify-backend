@@ -20,7 +20,7 @@ class RegisterUserView(GenericAPIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             user = serializer.data
- 
+  
             #SEND EMAIL FUNCTION
             #send_otp_email(user['email'])
             return Response({
