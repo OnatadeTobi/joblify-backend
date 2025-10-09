@@ -12,7 +12,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 # Create your views here.
 class RegisterUserView(GenericAPIView):
-    serializer_class = UserRegisterSerializer
+    serializer_class = UserRegisterSerializer     
 
     def post(self, request):
         user_data = request.data
