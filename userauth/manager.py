@@ -1,5 +1,5 @@
 from django.contrib.auth.models import BaseUserManager
-from django.core.exceptions import ValidationError 
+from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _ 
 
@@ -9,10 +9,10 @@ class UserManager(BaseUserManager):
             validate_email(email)
         except ValidationError:
             raise ValueError(_('Please enter a valid email address'))
-        
+
 
     def create_user(self, email, first_name, last_name, password, **extra_fields):
-        if email:        
+        if email:
             email=self.normalize_email(email)
             self.email_validator(email)
         else:
