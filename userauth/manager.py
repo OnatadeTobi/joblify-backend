@@ -12,7 +12,7 @@ class UserManager(BaseUserManager):
 
 
     def create_user(self, email, first_name, last_name, password, **extra_fields):
-        if email:
+        if email:  
             email=self.normalize_email(email)
             self.email_validator(email)
         else:
