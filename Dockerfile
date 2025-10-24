@@ -42,7 +42,7 @@ RUN pip install -r requirements.txt
 RUN playwright install --with-deps
 
 # Copy entire project
-COPY . .     
+COPY . .       
 
 # Expose port
 EXPOSE 8000
