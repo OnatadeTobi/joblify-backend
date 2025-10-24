@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 import uuid
 from .manager import UserManager
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken    
 
 AUTH_PROVIDERS = {'email':'email', 'google':'google', 'github':'github'}
 
