@@ -37,4 +37,4 @@ urlpatterns = [
     path('api/jobs/', include('joblinks.urls')),
     path('api/resumes/', include('resumes.urls')),
     path('api/auth/', include('social_accounts.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)   
